@@ -47,9 +47,9 @@ def custom_function(x, a, b, c):
 # c_values = [0.75, 0.50, 0.35, 0.28, 0.25, 0.15]  # Example prices for each binary
 # a = 3250  # Current price of the underlying asset (spot)
 
-k_values = [4500, 5000, 6000, 7000, 8000]      # 7 binary strikes
-c_values = [0.26, 0.15, 0.08, 0.06, 0.05]  # Example prices for each binary
-a = 3250  # Current price of the underlying asset (spot)
+k_values = [110, 120, 130, 150, 200, 250]      # 7 binary strikes
+c_values = [0.90, 0.83, 0.70, 0.50, 0.25, 0.15]  # Example prices for each binary
+a = 104  # Current price of the underlying asset (spot)
 
 # Validate binary prices are in [0,1]
 if not all(0 <= c <= 1 for c in c_values):
@@ -74,7 +74,7 @@ def binary_payoff(w, c, x, k):
     if not 0 <= c <= 1:
         raise ValueError("Binary price c must be between 0 and 1")
     
-    return w * (-c if x < k else (1 - c)) if w >= 0 else abs(w) * (c if x < k else (c - 1))
+    return w * (-1 if x < k else (1 - c)/c) if w >= 0 else abs(w) * (c/(1-c) if x < k else -1)
 
 def underlying_payoff(w_asset, a, x):
     """
@@ -109,7 +109,7 @@ This dashboard lets you:
 # 4. Fixed x range and number of points
 # -----------------------------------------------------------------------------
 x_min = 0
-x_max = k_values[-1]+1000
+x_max = k_values[-1]*1.2
 n_points = 200
 x_values = np.linspace(x_min, x_max, n_points)
 
@@ -201,7 +201,7 @@ with tab3:
     """)
     
     # Constants
-    a = 3250
+    a = 105
     b_c_values = {
         4000: 0.25,
         5000: 0.50,
